@@ -122,7 +122,7 @@ void setup() {
   ArduinoOTA.begin();
 
   client.setServer(MQTT_SERVER, MQTT_PORT);
-  client.setBufferSize(MQTT_BUFFER_SIZE); // to support large json message
+  client.setBufferSize(MQTT_BUFFER_SIZE); // to support large message
   client.setCallback(callback);
   client.setServer(MQTT_SERVER, MQTT_PORT);
   mqttSerial.print("Connecting to MQTT server...");
