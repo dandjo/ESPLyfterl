@@ -96,13 +96,11 @@ void setup() {
   Serial.begin(115200);
   setupScreen();
 
-  #ifdef PIN_SG1
-    // relay pins - set first to the inactive state, before configuring as outputs (avoid false triggering when initializing)
-    digitalWrite(PIN_STEP_2, SG_RELAY_INACTIVE_STATE);
-    digitalWrite(PIN_SG2, SG_RELAY_INACTIVE_STATE);
-    pinMode(PIN_STEP_2, OUTPUT);
-    pinMode(PIN_SG2, OUTPUT);
-  #endif
+  // relay pins: initial set to inactive state before configuring as outputs (avoid false triggering when initializing)
+  digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
+  digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
+  pinMode(PIN_STEP_2, OUTPUT);
+  pinMode(PIN_STEP_3, OUTPUT);
   #ifdef ARDUINO_M5Stick_C_Plus
     gpio_pulldown_dis(GPIO_NUM_25);
     gpio_pullup_dis(GPIO_NUM_25);
