@@ -1,34 +1,8 @@
 #include <PubSubClient.h>
-#include <EEPROM.h>
 #include "restart.h"
-
-#define EEPROM_CHK 0
-#define EEPROM_STATE_2 1
-#define EEPROM_STATE_3 2
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-
-
-void restoreFromEEPROM() {
-  if ('R' == EEPROM.read(EEPROM_CHK)) {
-    digitalWrite(PIN_STEP_2, EEPROM.read(EEPROM_STATE_2));
-    digitalWrite(PIN_STEP_3, EEPROM.read(EEPROM_STATE_3));
-    mqttSerial.printf(
-      "Restoring previous states: %s | %s",
-      (EEPROM.read(EEPROM_STATE_2) == RELAY_INACTIVE_STATE) ? "Off" : "On",
-      (EEPROM.read(EEPROM_STATE_3) == RELAY_INACTIVE_STATE) ? "Off" : "On"
-    );
-  } else {
-    mqttSerial.printf("EEPROM not initialized (%d). Initializing...", EEPROM.read(EEPROM_CHK));
-    EEPROM.write(EEPROM_CHK, 'R');
-    EEPROM.write(EEPROM_STATE_2, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_STATE_3, RELAY_INACTIVE_STATE);
-    EEPROM.commit();
-    digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
-    digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
-  }
-}
 
 
 void reconnect() {
@@ -69,22 +43,25 @@ void callbackStep(byte *payload, unsigned int length) {
   if (payload[0] == '1') {
     digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
     digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_STATE_2, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_STATE_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_STEP_2, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_STEP_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_STEP_STATE, 1);
     client.publish("esplyfterl/step/state", "1");
     Serial.println("Set state to 1");
   } else if (payload[0] == '2') {
     digitalWrite(PIN_STEP_2, RELAY_ACTIVE_STATE);
     digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_STATE_2, RELAY_ACTIVE_STATE);
-    EEPROM.write(EEPROM_STATE_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_STEP_2, RELAY_ACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_STEP_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_STEP_STATE, 2);
     client.publish("esplyfterl/step/state", "2");
     Serial.println("Set state to 2");
   } else if (payload[0] == '3') {
     digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
     digitalWrite(PIN_STEP_3, RELAY_ACTIVE_STATE);
-    EEPROM.write(EEPROM_STATE_2, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_STATE_3, RELAY_ACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_STEP_2, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_STEP_3, RELAY_ACTIVE_STATE);
+    EEPROM.write(EEPROM_STEP_STATE, 3);
     client.publish("esplyfterl/step/state", "3");
     Serial.println("Set state to 3");
   } else {
@@ -103,4 +80,11 @@ void callback(char *topic, byte *payload, unsigned int length) {
   } else {
     Serial.printf("Unknown topic: %s\n", topic);
   }
+}
+
+
+void publishEepromState() {
+  char state[1];
+  sprintf(state, "%s", EEPROM.read(EEPROM_STEP_STATE));
+  client.publish("esplyfterl/step/state", state);
 }

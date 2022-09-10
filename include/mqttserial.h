@@ -20,7 +20,7 @@ class MQTTSerial: public Stream {
   public:
     inline void begin(PubSubClient* client,const char* topic) {
       _client=client;
-      strcpy(_topic,topic);
+      strcpy(_topic, topic);
     }
 
     inline size_t write(uint8_t) {

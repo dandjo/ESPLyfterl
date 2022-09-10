@@ -20,6 +20,7 @@
 
 #include "setup.h" // <-- configure your setup here
 #include "mqttserial.h"
+#include "eeprom.h"
 #include "mqtt.h"
 #include "restart.h"
 
@@ -132,11 +133,7 @@ void setup() {
 }
 
 
-void loop() {
-  if (!client.connected()) { // (re)connect to MQTT if needed
-    reconnect();
-  }
-
+void mainLoop() {
   client.loop();
   ArduinoOTA.handle();
   while (busy) { // stop processing during OTA
@@ -152,4 +149,21 @@ void loop() {
     }
     M5.update();
   #endif
+}
+
+
+void waitLoop(uint ms) {
+  unsigned long start = millis();
+  while (millis() < start + ms) {
+    mainLoop();
+  }
+}
+
+
+void loop() {
+  if (!client.connected()) { // (re)connect to MQTT if needed
+    reconnect();
+  }
+  publishEepromState();
+  waitLoop(60 * 10 * 1000); // sleep 10 minutes
 }
