@@ -25,19 +25,17 @@
 #include "restart.h"
 
 
-bool busy = false;
+bool arduino_ota_busy = false;
 
 #if defined(ARDUINO_M5Stick_C) || defined(ARDUINO_M6Stick_C_Plus)
   long LCDTimeout = 40000; // keep screen on for 40s then turn off. button A will turn it on again.
 #endif
 
-uint16_t loopcount =0;
-
 
 void setupWifi() {
   delay(10);
   // we start by connecting to a WiFi network
-  mqttSerial.printf("Connecting to %s\n", WIFI_SSID);
+  mqttSerial.printf("Connecting to %s...", WIFI_SSID);
   #if defined(WIFI_IP) && defined(WIFI_GATEWAY) && defined(WIFI_SUBNET)
     IPAddress local_IP(WIFI_IP);
     IPAddress gateway(WIFI_GATEWAY);
@@ -68,7 +66,7 @@ void setupWifi() {
       restart_board();
     }
   }
-  mqttSerial.printf("Connected. IP Address: %s\n", WiFi.localIP().toString().c_str());
+  mqttSerial.printf("Connected. IP Address: %s", WiFi.localIP().toString().c_str());
 }
 
 
@@ -113,7 +111,7 @@ void setup() {
   setupWifi();
   ArduinoOTA.setHostname("esplyfterl");
   ArduinoOTA.onStart([]() {
-    busy = true;
+    arduino_ota_busy = true;
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
@@ -133,37 +131,26 @@ void setup() {
 }
 
 
-void mainLoop() {
-  client.loop();
-  ArduinoOTA.handle();
-  while (busy) { // stop processing during OTA
-    ArduinoOTA.handle();
-  }
-
-  #if defined(ARDUINO_M5Stick_C) || defined(ARDUINO_M5Stick_C_Plus)
-    if (M5.BtnA.wasPressed()) { // turn on screen
-      M5.Axp.ScreenBreath(12);
-      LCDTimeout = millis() + 30000;
-    } else if (LCDTimeout < millis()) { // turn off screen
-      M5.Axp.ScreenBreath(0);
-    }
-    M5.update();
-  #endif
-}
-
-
-void waitLoop(uint ms) {
-  unsigned long start = millis();
-  while (millis() < start + ms) {
-    mainLoop();
-  }
-}
-
-
 void loop() {
+  unsigned long start = millis();
   if (!client.connected()) { // (re)connect to MQTT if needed
     reconnect();
   }
+  while (millis() < start + 60 * 10 * 1000) { // block for 10 minutes
+    client.loop();
+    do {
+      ArduinoOTA.handle();
+    } while (arduino_ota_busy); // stop processing during OTA
+
+    #if defined(ARDUINO_M5Stick_C) || defined(ARDUINO_M5Stick_C_Plus)
+      if (M5.BtnA.wasPressed()) { // turn on screen
+        M5.Axp.ScreenBreath(12);
+        LCDTimeout = millis() + 30000;
+      } else if (LCDTimeout < millis()) { // turn off screen
+        M5.Axp.ScreenBreath(0);
+      }
+      M5.update();
+    #endif
+  }
   publishEepromState();
-  waitLoop(60 * 10 * 1000); // sleep 10 minutes
 }

@@ -22,7 +22,7 @@ void reconnect() {
         ArduinoOTA.handle();
       }
       if (i++ == 100) {
-        Serial.printf("Tried for 500 sec, rebooting now.");
+        Serial.printf("tried for 500 sec, rebooting now.");
         restart_board();
       }
     }
@@ -47,7 +47,6 @@ void callbackStep(byte *payload, unsigned int length) {
     EEPROM.write(EEPROM_PIN_STEP_3, RELAY_INACTIVE_STATE);
     EEPROM.write(EEPROM_STEP_STATE, 1);
     client.publish("esplyfterl/step/state", "1");
-    Serial.println("Set state to 1");
   } else if (payload[0] == '2') {
     digitalWrite(PIN_STEP_2, RELAY_ACTIVE_STATE);
     digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
@@ -55,7 +54,6 @@ void callbackStep(byte *payload, unsigned int length) {
     EEPROM.write(EEPROM_PIN_STEP_3, RELAY_INACTIVE_STATE);
     EEPROM.write(EEPROM_STEP_STATE, 2);
     client.publish("esplyfterl/step/state", "2");
-    Serial.println("Set state to 2");
   } else if (payload[0] == '3') {
     digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
     digitalWrite(PIN_STEP_3, RELAY_ACTIVE_STATE);
@@ -63,22 +61,21 @@ void callbackStep(byte *payload, unsigned int length) {
     EEPROM.write(EEPROM_PIN_STEP_3, RELAY_ACTIVE_STATE);
     EEPROM.write(EEPROM_STEP_STATE, 3);
     client.publish("esplyfterl/step/state", "3");
-    Serial.println("Set state to 3");
   } else {
-    Serial.printf("Unknown message: %s\n", payload);
+    mqttSerial.printf("Unknown message: %s", payload);
   }
   EEPROM.commit();
 }
 
 
 void callback(char *topic, byte *payload, unsigned int length) {
-  Serial.printf("Message arrived [%s] : %s\n", topic, payload);
+  Serial.printf("Message arrived [%s] : %s", topic, payload);
   if (strcmp(topic, "esplyfterl/reboot") == 0) {
     callbackReboot(payload, length);
   } else if (strcmp(topic, "esplyfterl/step/set") == 0) {
     callbackStep(payload, length);
   } else {
-    Serial.printf("Unknown topic: %s\n", topic);
+    mqttSerial.printf("Unknown topic: %s", topic);
   }
 }
 
