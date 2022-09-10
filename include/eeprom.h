@@ -6,7 +6,6 @@
 #define EEPROM_PIN_STEP_3 3
 
 
-
 void restoreFromEEPROM() {
   if ('R' == EEPROM.read(EEPROM_CHK)) {
     digitalWrite(PIN_STEP_2, EEPROM.read(EEPROM_PIN_STEP_2));
