@@ -1,9 +1,10 @@
 #include <EEPROM.h>
 
 #define EEPROM_CHK 0
-#define EEPROM_PIN_STEP_2 1
-#define EEPROM_PIN_STEP_3 2
-#define EEPROM_STEP_STATE 4
+#define EEPROM_STEP_STATE 1
+#define EEPROM_PIN_STEP_2 2
+#define EEPROM_PIN_STEP_3 3
+
 
 
 void restoreFromEEPROM() {
