@@ -18,8 +18,8 @@ class MQTTSerial: public Stream {
     char _topic[64];
 
   public:
-    inline void begin(PubSubClient* client,const char* topic) {
-      _client=client;
+    inline void begin(PubSubClient* client, const char* topic) {
+      _client = client;
       strcpy(_topic, topic);
     }
 

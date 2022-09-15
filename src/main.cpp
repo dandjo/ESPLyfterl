@@ -35,7 +35,7 @@ bool arduino_ota_busy = false;
 void setupWifi() {
   delay(10);
   // we start by connecting to a WiFi network
-  mqttSerial.printf("Connecting to %s...", WIFI_SSID);
+  mqttSerial.printf("Connecting to %s... ", WIFI_SSID);
   #if defined(WIFI_IP) && defined(WIFI_GATEWAY) && defined(WIFI_SUBNET)
     IPAddress local_IP(WIFI_IP);
     IPAddress gateway(WIFI_GATEWAY);
@@ -54,7 +54,7 @@ void setupWifi() {
     #endif
 
     if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
-      mqttSerial.println("Failed to set static ip!");
+      mqttSerial.prrint("Failed to set static ip! ");
     }
   #endif
   WiFi.begin(WIFI_SSID, WIFI_PWD);
@@ -66,7 +66,7 @@ void setupWifi() {
       restart_board();
     }
   }
-  mqttSerial.printf("Connected. IP Address: %s", WiFi.localIP().toString().c_str());
+  mqttSerial.printf("Connected. IP Address: %s. ", WiFi.localIP().toString().c_str());
 }
 
 
@@ -82,7 +82,7 @@ void setupScreen() {
     int xpos = M5.Lcd.width() / 2; // half the screen width
     int ypos = M5.Lcd.height() / 2; // half the screen width
     M5.Lcd.setTextColor(TFT_DARKGREY);
-    M5.Lcd.drawString("ESPLyfterl", xpos,ypos,1);
+    M5.Lcd.drawString("ESPLyfterl", xpos, ypos, 1);
     delay(2000);
     M5.Lcd.fillScreen(TFT_BLACK);
     M5.Lcd.setTextFont(1);
@@ -107,7 +107,6 @@ void setup() {
 
   EEPROM.begin(10);
   restoreFromEEPROM(); // restore previous state
-  mqttSerial.print("Setting up wifi...");
   setupWifi();
   ArduinoOTA.setHostname("esplyfterl");
   ArduinoOTA.onStart([]() {
@@ -115,7 +114,7 @@ void setup() {
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
-    mqttSerial.print("Error on OTA - restarting...");
+    mqttSerial.print("Error on OTA - restarting... ");
     restart_board();
   });
   ArduinoOTA.begin();
@@ -124,10 +123,10 @@ void setup() {
   client.setBufferSize(MQTT_BUFFER_SIZE); // to support large message
   client.setCallback(callback);
   client.setServer(MQTT_SERVER, MQTT_PORT);
-  mqttSerial.print("Connecting to MQTT server...");
+  mqttSerial.print("Connecting to MQTT server... ");
   mqttSerial.begin(&client, "esplyfterl/log");
   reconnect();
-  mqttSerial.print("ESPLyfterl started!");
+  mqttSerial.print("ESPLyfterl started! ");
 }
 
 

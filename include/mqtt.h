@@ -9,20 +9,20 @@ void reconnect() {
   // loop until we're reconnected
   int i = 0;
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
-    if (client.connect("ESPLyfterl", MQTT_USERNAME, MQTT_PASSWORD, "esplyfterl/lwt", 0, true, "Offline")) {
-      Serial.println("connected!");
-      client.publish("esplyfterl/lwt", "Online", true);
-      client.subscribe("esplyfterl/reboot");
+    Serial.print("Attempting MQTT connection... ");
+    if (client.connect("ESPLyfterl", MQTT_USERNAME, MQTT_PASSWORD, "esplyfterl/LWT", 0, true, "Offline")) {
+      mqttSerial.print("Connected! ");
+      client.publish("esplyfterl/LWT", "Online", true);
+      client.subscribe("esplyfterl/REBOOT");
       client.subscribe("esplyfterl/step/set");
     } else {
-      Serial.printf("failed, rc=%d, try again in 5 seconds", client.state());
+      Serial.printf("Failed, rc=%d, try again in 5 seconds. ", client.state());
       unsigned long start = millis();
       while (millis() < start + 5000) {
         ArduinoOTA.handle();
       }
       if (i++ == 100) {
-        Serial.printf("tried for 500 sec, rebooting now.");
+        Serial.printf("Tried for 500 sec, rebooting now. ");
         restart_board();
       }
     }
@@ -31,7 +31,7 @@ void reconnect() {
 
 
 void callbackReboot(byte *payload, unsigned int length) {
-  mqttSerial.println("Rebooting");
+  mqttSerial.print("Rebooting. ");
   delay(100);
   restart_board();
 }
@@ -39,7 +39,6 @@ void callbackReboot(byte *payload, unsigned int length) {
 
 void callbackStep(byte *payload, unsigned int length) {
   payload[length] = '\0';
-
   if (payload[0] == '1') {
     digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
     digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
@@ -62,20 +61,20 @@ void callbackStep(byte *payload, unsigned int length) {
     EEPROM.write(EEPROM_STEP_STATE, 3);
     client.publish("esplyfterl/step/state", "3");
   } else {
-    mqttSerial.printf("Unknown message: %s", payload);
+    mqttSerial.printf("Unknown message: %s. ", payload);
   }
   EEPROM.commit();
 }
 
 
 void callback(char *topic, byte *payload, unsigned int length) {
-  Serial.printf("Message arrived [%s] : %s", topic, payload);
-  if (strcmp(topic, "esplyfterl/reboot") == 0) {
+  Serial.printf("Message arrived [%s]: %s. ", topic, payload);
+  if (strcmp(topic, "esplyfterl/REBOOT") == 0) {
     callbackReboot(payload, length);
   } else if (strcmp(topic, "esplyfterl/step/set") == 0) {
     callbackStep(payload, length);
   } else {
-    mqttSerial.printf("Unknown topic: %s", topic);
+    mqttSerial.printf("Unknown topic: %s. ", topic);
   }
 }
 
