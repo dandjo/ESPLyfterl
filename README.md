@@ -1,20 +1,18 @@
 ![Logo](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/logo.png)
 
-# ESPLyfterl
-
 Control your EuroAir/DomoAir ventilation system via ESP32.
 
 InspiredInspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://github.com/raomin/ESPAltherma), I built this solution for home ventilation systems from the manufacturer [Swentibold](https://www.swentibold.com/). This includes the brands EuroAir and [DomoAir](https://www.domoair.at/) (Austria). ESPLyfterl works with all models that can be controlled via a 3 or 4 position switch (modes: low, medium, high, off).
 
-## Features
+# Features
 
 * No need for extra hardware, just ESP32, two relays and some wires
 * Control via MQTT and therefore all common home automation systems
 * Supports update OverTheAir
 
-## Prerequisites
+# Prerequisites
 
-### Hardware
+## Hardware
 
 * A [Swentibold](https://www.swentibold.com/) compatible home ventilation system
 * An ESP32, my recommendation is the M5StickC Plus
@@ -23,13 +21,13 @@ InspiredInspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](ht
 
 ![Equipment](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/img_equipment.jpg)
 
-### Software
+## Software
 
 * [PlatformIO](https://platformio.org/)
 
-## Getting started
+# Getting started
 
-### Step 1: Firmware
+## Step 1: Firmware
 
 * Download the repository.
 * Copy `src/setup.tpl.h` to `src/setup.h` and edit as follows:
@@ -41,7 +39,7 @@ InspiredInspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](ht
   pio run --environment <your environment> --target upload
   ```
 
-### Step 2: Connection
+## Step 2: Connection
 
 * Turn OFF your home ventilation system at the circuit breaker.
 * Find the appropriate connection on the board: SK6
@@ -61,21 +59,21 @@ InspiredInspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](ht
 
     ![Connection](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/img_connection.jpg)
 
-### Step 3: Integration
+## Step 3: Integration
 
 Almost there! To control the ESP32 via MQTT use the home automation of your choice.
 
-#### MQTT Topics
+### MQTT Topics
 
-##### State Topic
+#### State Topic
 
 `esplyfterl/step/state`
 
-##### Command Topic
+#### Command Topic
 
 `esplyfterl/step/set`
 
-##### openHAB Integration
+#### openHAB Integration
 
 I am using [openHAB](https://www.openhab.org/), so here's an example `Thing` configuration.
 
@@ -104,13 +102,13 @@ When using sitemaps in openHAB, here's a config.
 Setpoint icon="fan" label="Ventilation Step" item=esplyfterl_step minValue=1 maxValue=3 step=1
 ```
 
-## Contributions
+# Contributions
 
 I am always happy to receive criticism, suggestions for improvement and participation. Feel free to send me bug reports or pull requests.
 
 You can also buy me a beer via [PayPal](https://paypal.me/danielpernold).
 Thanks! :-)
 
-## License
+# License
 
 ESPLyfterl is licensed under [MIT License](https://mit-license.org/).
