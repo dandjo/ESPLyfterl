@@ -34,7 +34,7 @@ Inspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://gi
 * Copy `src/setup.tpl.h` to `src/setup.h` and edit as follows:
   * Enter WiFi and MQTT settings.
   * Select the GPIO pins to control the relays. For M5StickC and M5StickC Plus the pins of the Grove interface are predefined (32 and 33) where 32 is to control relay 1 and 33 to control relay 2.
-  * Uncomment wheter your relays are low or high triggered.
+  * Uncomment whether your relays are low or high triggered.
 * Ready, connect the ESP32 to your computer and run the following command in your console (where `<your environment>` is e.g. `m5stickcplus`).
   ```sh
   pio run --environment <your environment> --target upload
