@@ -2,7 +2,7 @@
 
 Control your EuroAir/DomoAir ventilation system via ESP32.
 
-InspiredInspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://github.com/raomin/ESPAltherma), I built this solution for home ventilation systems from the manufacturer [Swentibold](https://www.swentibold.com/). This includes the brands EuroAir and [DomoAir](https://www.domoair.at/) (Austria). ESPLyfterl works with all models that can be controlled via a 3 or 4 position switch (modes: low, medium, high, off).
+Inspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://github.com/raomin/ESPAltherma), I built this solution for home ventilation systems from the manufacturer [Swentibold](https://www.swentibold.com/). This includes the brands EuroAir and [DomoAir](https://www.domoair.at/) (Austria). ESPLyfterl works with all models that can be controlled via a 3 or 4 position switch (modes: low, medium, high, off).
 
 # Features
 
