@@ -17,7 +17,7 @@ Inspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://gi
 * A [Swentibold](https://www.swentibold.com/) compatible home ventilation system
 * An ESP32, my recommendation is the M5StickC Plus
 * A 2 channel relay or 2 1 channel relays (low or high triggered)
-* A 4 pin Grove Interface to JST (for M5StickC) or any other 4 pin connection to 2 relays
+* A 4 pin Grove interface to JST (for M5StickC) or any other 4 pin connection to 2 relays
 * A 5V power supply for ESP32 (USB-C for M5StickC)
 
 ![Equipment](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/img_equipment.jpg)
@@ -33,7 +33,7 @@ Inspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://gi
 * Download the repository.
 * Copy `src/setup.tpl.h` to `src/setup.h` and edit as follows:
   * Enter WiFi and MQTT settings.
-  * Select the GPIO pins to control the relays. For M5StickC and M5StickC Plus the pins of the Grove port are predefied (32 and 33) where 32 is to control relay 1 and 33 to control relay 2.
+  * Select the GPIO pins to control the relays. For M5StickC and M5StickC Plus the pins of the Grove interface are predefined (32 and 33) where 32 is to control relay 1 and 33 to control relay 2.
   * Uncomment wheter your relays are low or high triggered.
 * Ready, connect the ESP32 to your computer and run the following command in your console (where `<your environment>` is e.g. `m5stickcplus`).
   ```sh
