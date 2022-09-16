@@ -52,6 +52,7 @@ InspiredInspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](ht
   * 2 to the first relay controlled by `PIN_STEP_2` (32 for M5StickC).
   * 3 to the second relay controlled by `PIN_STEP_3` (33 for M5StickC).
   * Table:
+
     | SK6 | Relay   | Picture        |
     | --- | ------- | -------------- |
     | GND | GND     | Green/Yellow   |
