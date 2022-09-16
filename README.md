@@ -18,6 +18,7 @@ Inspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://gi
 * An ESP32, my recommendation is the M5StickC Plus
 * A 2 channel relay or 2 1 channel relays (low or high triggered)
 * A 4 pin Grove Interface to JST (for M5StickC) or any other 4 pin connection to 2 relays
+* A 5V power supply for ESP32 (USB-C for M5StickC)
 
 ![Equipment](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/img_equipment.jpg)
 
