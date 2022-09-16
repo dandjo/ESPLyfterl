@@ -13,7 +13,7 @@ void reconnect() {
     if (client.connect("ESPLyfterl", MQTT_USERNAME, MQTT_PASSWORD, "esplyfterl/LWT", 0, true, "Offline")) {
       mqttSerial.print("Connected! ");
       client.publish("esplyfterl/LWT", "Online", true);
-      client.subscribe("esplyfterl/REBOOT");
+      client.subscribe("esplyfterl/POWER");
       client.subscribe("esplyfterl/step/set");
     } else {
       Serial.printf("Failed, rc=%d, try again in 5 seconds. ", client.state());
@@ -30,10 +30,15 @@ void reconnect() {
 }
 
 
-void callbackReboot(byte *payload, unsigned int length) {
-  mqttSerial.print("Rebooting. ");
-  delay(100);
-  restart_board();
+void callbackPower(byte *payload, unsigned int length) {
+  payload[length] = '\0';
+  if (payload[0] == 'R') {
+    mqttSerial.print("Rebooting. ");
+    delay(100);
+    restart_board();
+  } else {
+    mqttSerial.printf("Unknown message: %s. ", payload);
+  }
 }
 
 
@@ -69,8 +74,8 @@ void callbackStep(byte *payload, unsigned int length) {
 
 void callback(char *topic, byte *payload, unsigned int length) {
   Serial.printf("Message arrived [%s]: %s. ", topic, payload);
-  if (strcmp(topic, "esplyfterl/REBOOT") == 0) {
-    callbackReboot(payload, length);
+  if (strcmp(topic, "esplyfterl/POWER") == 0) {
+    callbackPower(payload, length);
   } else if (strcmp(topic, "esplyfterl/step/set") == 0) {
     callbackStep(payload, length);
   } else {
