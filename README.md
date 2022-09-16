@@ -45,17 +45,18 @@ InspiredInspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](ht
 
 * Turn OFF your home ventilation system at the circuit breaker.
 * Find the appropriate connection on the board: SK6
+
   ![Circuit](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/schematic.png)
 * Connect your relays (normally open) as follows (usually you have to bridge GND):
   * The GND to GND of your relays.
   * 2 to the first relay controlled by `PIN_STEP_2` (32 for M5StickC).
   * 3 to the second relay controlled by `PIN_STEP_3` (33 for M5StickC).
-
-  | SK6 | Relay   | Picture        |
-  | --- | ------- | -------------- |
-  | GND | GND     | Green/Yellow   |
-  | 2   | Relay 1 | Brown          |
-  | 3   | Relay 2 | White          |
+  * Table:
+    | SK6 | Relay   | Picture        |
+    | --- | ------- | -------------- |
+    | GND | GND     | Green/Yellow   |
+    | 2   | Relay 1 | Brown          |
+    | 3   | Relay 2 | White          |
 
   ![Connection](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/img_connection.jpg)
 
