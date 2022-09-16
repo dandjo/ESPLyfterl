@@ -81,6 +81,6 @@ void callback(char *topic, byte *payload, unsigned int length) {
 
 void publishEepromState() {
   char state[1];
-  sprintf(state, "%s", EEPROM.read(EEPROM_STEP_STATE));
+  sprintf(state, "%d", EEPROM.read(EEPROM_STEP_STATE));
   client.publish("esplyfterl/step/state", state);
 }

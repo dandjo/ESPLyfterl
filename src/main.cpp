@@ -127,6 +127,7 @@ void setup() {
   mqttSerial.begin(&client, "esplyfterl/log");
   reconnect();
   mqttSerial.print("ESPLyfterl started! ");
+  publishEepromState();
 }
 
 
@@ -135,7 +136,7 @@ void loop() {
   if (!client.connected()) { // (re)connect to MQTT if needed
     reconnect();
   }
-  while (millis() < start + 60 * 10 * 1000) { // block for 10 minutes
+  while (millis() < start + 60 * 1 * 1000) { // block for 1 minute
     client.loop();
     do {
       ArduinoOTA.handle();
