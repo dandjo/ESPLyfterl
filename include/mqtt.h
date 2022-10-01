@@ -5,7 +5,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 
-void reconnect() {
+void reconnectMqtt() {
   // loop until we're reconnected
   int i = 0;
   while (!client.connected()) {
