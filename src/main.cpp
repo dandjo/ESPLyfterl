@@ -32,6 +32,19 @@ bool arduino_ota_busy = false;
 #endif
 
 
+void checkWifi() {
+  int i = 0;
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    if (i++ == 120) {
+      Serial.printf("Tried connecting for 60 sec, rebooting now. ");
+      restart_board();
+    }
+  }
+}
+
+
 void setupWifi() {
   delay(10);
   // we start by connecting to a WiFi network
@@ -58,16 +71,7 @@ void setupWifi() {
     }
   #endif
   WiFi.begin(WIFI_SSID, WIFI_PWD);
-  WiFi.setAutoReconnect(true);
-  int i = 0;
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-    if (i++ == 120) {
-      Serial.printf("Tried connecting for 60 sec, rebooting now. ");
-      restart_board();
-    }
-  }
+  checkWifi();
   mqttSerial.printf("Connected. IP Address: %s. ", WiFi.localIP().toString().c_str());
 }
 
@@ -135,6 +139,9 @@ void setup() {
 
 void loop() {
   unsigned long start = millis();
+  if (WiFi.status() != WL_CONNECTED) {
+    checkWifi();
+  }
   if (!client.connected()) { // (re)connect to MQTT if needed
     reconnectMqtt();
   }
