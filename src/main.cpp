@@ -70,8 +70,6 @@ void setupWifi() {
       mqttSerial.prrint("Failed to set static ip! ");
     }
   #endif
-  WiFi.setScanMethod(WIFI_ALL_CHANNEL_SCAN);
-  WiFi.setSortMethod(WIFI_CONNECT_AP_BY_SIGNAL);
   WiFi.begin(WIFI_SSID, WIFI_PWD);
   checkWifi();
   mqttSerial.printf("Connected. IP Address: %s. ", WiFi.localIP().toString().c_str());
