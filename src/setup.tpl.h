@@ -18,8 +18,8 @@
 #define MQTT_BUFFER_SIZE 4096
 
 /* PINS for controlling your relays */
-#define PIN_STEP_2 32 // PIN connected to dry contact step 2 relay (normally open)
-#define PIN_STEP_3 33 // PIN connected to dry contact step 3 relay (normally open)
+#define PIN_LEVEL_2 32 // PIN connected to dry contact level 2 relay (normally open)
+#define PIN_LEVEL_3 33 // PIN connected to dry contact level 3 relay (normally open)
 /* define if your relay board is LOW or HIGH triggered (signal pins)
    only uncomment one of them */
 //#define RELAY_HIGH_TRIGGER

@@ -48,8 +48,8 @@ Inspired by [Raomin](https://github.com/raomin) and his [ESPAltherma](https://gi
   ![Circuit](https://raw.githubusercontent.com/dandjo/ESPLyfterl/main/doc/assets/schematic.png)
 * Connect your relays (normally open) as follows (usually you have to bridge GND):
   * The GND to GND of your relays.
-  * 2 to the first relay controlled by `PIN_STEP_2` (32 for M5StickC).
-  * 3 to the second relay controlled by `PIN_STEP_3` (33 for M5StickC).
+  * 2 to the first relay controlled by `PIN_LEVEL_2` (32 for M5StickC).
+  * 3 to the second relay controlled by `PIN_LEVEL_3` (33 for M5StickC).
   * Table and picture:
 
     | SK6 | Relay   | Picture        |
@@ -68,11 +68,11 @@ Almost there! To control the ESP32 via MQTT use the home automation of your choi
 
 #### State Topic
 
-`esplyfterl/step/state`
+`esplyfterl/level/state`
 
 #### Command Topic
 
-`esplyfterl/step/set`
+`esplyfterl/level/set`
 
 #### openHAB Integration
 
@@ -85,12 +85,12 @@ thingTypeUID: mqtt:topic
 configuration: {}
 bridgeUID: mqtt:broker:XXXXXXXXXX
 channels:
-  - id: esplyfterl_step
+  - id: esplyfterl_level
     channelTypeUID: mqtt:number
-    label: ESPLyfterl Step
+    label: ESPLyfterl Level
     configuration:
-      commandTopic: esplyfterl/step/set
-      stateTopic: esplyfterl/step/state
+      commandTopic: esplyfterl/level/set
+      stateTopic: esplyfterl/level/state
       min: 1
       max: 3
 ```
@@ -100,7 +100,7 @@ channels:
 When using sitemaps in openHAB, here's a config.
 
 ```yml
-Setpoint icon="fan" label="Ventilation Step" item=esplyfterl_step minValue=1 maxValue=3 step=1
+Setpoint icon="fan" label="Ventilation Level" item=esplyfterl_level minValue=1 maxValue=3 step=1
 ```
 
 # Contributions

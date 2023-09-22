@@ -14,7 +14,7 @@ void reconnectMqtt() {
       mqttSerial.print("Connected! ");
       client.publish("esplyfterl/LWT", "Online", true);
       client.subscribe("esplyfterl/POWER");
-      client.subscribe("esplyfterl/step/set");
+      client.subscribe("esplyfterl/level/set");
     } else {
       Serial.printf("Failed, rc=%d, try again in 5 seconds. ", client.state());
       unsigned long start = millis();
@@ -45,26 +45,26 @@ void callbackPower(byte *payload, unsigned int length) {
 void callbackStep(byte *payload, unsigned int length) {
   payload[length] = '\0';
   if (payload[0] == '1') {
-    digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
-    digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_PIN_STEP_2, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_PIN_STEP_3, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_STEP_STATE, 1);
-    client.publish("esplyfterl/step/state", "1");
+    digitalWrite(PIN_LEVEL_2, RELAY_INACTIVE_STATE);
+    digitalWrite(PIN_LEVEL_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_LEVEL_2, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_LEVEL_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_LEVEL_STATE, 1);
+    client.publish("esplyfterl/level/state", "1");
   } else if (payload[0] == '2') {
-    digitalWrite(PIN_STEP_2, RELAY_ACTIVE_STATE);
-    digitalWrite(PIN_STEP_3, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_PIN_STEP_2, RELAY_ACTIVE_STATE);
-    EEPROM.write(EEPROM_PIN_STEP_3, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_STEP_STATE, 2);
-    client.publish("esplyfterl/step/state", "2");
+    digitalWrite(PIN_LEVEL_2, RELAY_ACTIVE_STATE);
+    digitalWrite(PIN_LEVEL_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_LEVEL_2, RELAY_ACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_LEVEL_3, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_LEVEL_STATE, 2);
+    client.publish("esplyfterl/level/state", "2");
   } else if (payload[0] == '3') {
-    digitalWrite(PIN_STEP_2, RELAY_INACTIVE_STATE);
-    digitalWrite(PIN_STEP_3, RELAY_ACTIVE_STATE);
-    EEPROM.write(EEPROM_PIN_STEP_2, RELAY_INACTIVE_STATE);
-    EEPROM.write(EEPROM_PIN_STEP_3, RELAY_ACTIVE_STATE);
-    EEPROM.write(EEPROM_STEP_STATE, 3);
-    client.publish("esplyfterl/step/state", "3");
+    digitalWrite(PIN_LEVEL_2, RELAY_INACTIVE_STATE);
+    digitalWrite(PIN_LEVEL_3, RELAY_ACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_LEVEL_2, RELAY_INACTIVE_STATE);
+    EEPROM.write(EEPROM_PIN_LEVEL_3, RELAY_ACTIVE_STATE);
+    EEPROM.write(EEPROM_LEVEL_STATE, 3);
+    client.publish("esplyfterl/level/state", "3");
   } else {
     mqttSerial.printf("Unknown message: %s. ", payload);
   }
@@ -76,7 +76,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
   Serial.printf("Message arrived [%s]: %s. ", topic, payload);
   if (strcmp(topic, "esplyfterl/POWER") == 0) {
     callbackPower(payload, length);
-  } else if (strcmp(topic, "esplyfterl/step/set") == 0) {
+  } else if (strcmp(topic, "esplyfterl/level/set") == 0) {
     callbackStep(payload, length);
   } else {
     mqttSerial.printf("Unknown topic: %s. ", topic);
@@ -86,6 +86,6 @@ void callback(char *topic, byte *payload, unsigned int length) {
 
 void publishEepromState() {
   char state[1];
-  sprintf(state, "%d", EEPROM.read(EEPROM_STEP_STATE));
-  client.publish("esplyfterl/step/state", state);
+  sprintf(state, "%d", EEPROM.read(EEPROM_LEVEL_STATE));
+  client.publish("esplyfterl/level/state", state);
 }
